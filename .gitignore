@@ -89,3 +89,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# PyCharm and Custom
+.idea/
+_old_notOOP/
+main.exe_Shortcut.lnk
+build.bat
