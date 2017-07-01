@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>437</width>
+    <height>604</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QListWidget" name="QlistCategories">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>100</y>
+      <width>181</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
+    <item>
+     <property name="text">
+      <string extracomment="1">test item</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="QbuttonSelect">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>100</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Select Category</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="QtextMissing_ingredient">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>60</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="QlabelMissing_ingredient">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>70</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Missing Ingredient:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="QlabelCategories">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>100</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Categories:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="QlabelMissing_ingredient_title">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>321</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Missing Ingredient Category Selection</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="QbuttonSkip">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>140</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Skip ingredient</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>437</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuList_management">
+    <property name="title">
+     <string>List management</string>
+    </property>
+    <addaction name="actionSort_grocery_list"/>
+    <addaction name="actionAdd_recipe_to_list"/>
+   </widget>
+   <addaction name="menuList_management"/>
+  </widget>
+  <action name="actionSort_grocery_list">
+   <property name="text">
+    <string>Sort grocery list</string>
+   </property>
+  </action>
+  <action name="actionAdd_recipe_to_list">
+   <property name="text">
+    <string>Add recipe to list</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
