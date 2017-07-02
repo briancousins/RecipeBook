@@ -59,7 +59,7 @@ class groceryStore:
 
         try:  # find ingredient in associated_ingredients
             category = next((c for c in self.categories if
-                             int(c[0]) == self.ingredients[ingredient]), (99, 'Unknown_Failed_Search', 99))
+                             int(c[0]) == self.ingredients[self.isolate_ingredient_name(ingredient)]), (99, 'Unknown_Failed_Search', 99))
 
         except KeyError: # ingredient DNE, no problem.
             category = None
@@ -81,8 +81,7 @@ class groceryStore:
 
         category_id = 99  # set default
 
-        isolated_ingredient = self.isolate_ingredient_name(ingredient)
-        category = self.get_category_for_ingredient(isolated_ingredient)
+        category = self.get_category_for_ingredient(ingredient)
 
         if category is not None:
             category_id = category[return_column]
@@ -132,6 +131,8 @@ class groceryStore:
     def add_ingredient_to_category(self, ingredient_name, category):
 
         if groceryStore.ingredient_file is not None:
+            ingredient_name = self.isolate_ingredient_name(ingredient_name)
+
             with open(groceryStore.ingredient_file, 'ab') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL, quotechar='`')
                 writer.writerow([ingredient_name, category])
