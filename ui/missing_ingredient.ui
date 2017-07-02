@@ -26,23 +26,18 @@
     <property name="frameShadow">
      <enum>QFrame::Sunken</enum>
     </property>
-    <item>
-     <property name="text">
-      <string extracomment="1">test item</string>
-     </property>
-    </item>
    </widget>
    <widget class="QPushButton" name="QbuttonSelect">
     <property name="geometry">
      <rect>
       <x>310</x>
       <y>100</y>
-      <width>91</width>
+      <width>121</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>Select Category</string>
+     <string>Set and add to list</string>
     </property>
    </widget>
    <widget class="QTextEdit" name="QtextMissing_ingredient">
@@ -59,9 +54,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>70</y>
+      <y>65</y>
       <width>101</width>
-      <height>16</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
@@ -104,12 +99,31 @@
      <rect>
       <x>310</x>
       <y>140</y>
-      <width>91</width>
+      <width>121</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>Skip ingredient</string>
+     <string>Set but don't add</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="QlastAction">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>190</y>
+      <width>111</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
