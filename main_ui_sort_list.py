@@ -18,16 +18,18 @@ UiMainWindow, QtBaseClass = uic.loadUiType('./ui/recipeBookUI.ui')
 
 #UI class definition
 class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
+
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         UiMainWindow.__init__(self)
         self.setupUi(self)
-
+        
         #setup menubar
         self.QActionSort_grocery_list.triggered.connect(self.show_pageMissingCategory)
 
         #setup missing ingredient page:
         self.populate_categories()
+
         self.next_missing_ingredient()
 
         if self.missing_ingredient is not None:
@@ -69,6 +71,7 @@ class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
         selected_id = self.get_selected_cagetory('id')
 
         if self.missing_ingredient is not None and selected_id is not None:
+
             self.QlastAction.setText('Added ' +self.missing_ingredient[2] + ' to ' + grocery_store.get_category_name_from_id(selected_id))
 
             grocery_store.add_ingredient_to_category(self.missing_ingredient[2], selected_id)
