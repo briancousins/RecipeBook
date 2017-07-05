@@ -143,6 +143,8 @@ class groceryStore:
     def get_category_order_from_id(self, category_id):
         return next((c[2] for c in self.categories if c[0] == category_id), 99)
 
+    def get_category_name_from_id(self, category_id):
+        return next((c[1] for c in self.categories if c[0] == category_id), 99)
 
 class groceryIngredientSetup(groceryStore):
     def __init__(self, category_order_csv):

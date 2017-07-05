@@ -14,15 +14,20 @@ groceries = grocerylist.groceryList(wp.WUNDERLIST_GROCERY, wp)
 groceries.get_categories(grocery_store)
 
 # load the UI class objects
-UiMainWindow, QtBaseClass = uic.loadUiType('./ui/missing_ingredient.ui')
+UiMainWindow, QtBaseClass = uic.loadUiType('./ui/recipeBookUI.ui')
 
 #UI class definition
-class MyApp(QtWidgets.QMainWindow, UiMainWindow):
+class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
+
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         UiMainWindow.__init__(self)
         self.setupUi(self)
+        
+        #setup menubar
+        self.QActionSort_grocery_list.triggered.connect(self.show_pageMissingCategory)
 
+        #setup missing ingredient page:
         self.populate_categories()
 
         self.next_missing_ingredient()
@@ -31,7 +36,11 @@ class MyApp(QtWidgets.QMainWindow, UiMainWindow):
             self.QbuttonSelect.clicked.connect(self.select_category_and_next)
             self.QbuttonSkip.clicked.connect(self.skip_category_select)
 
+        #next setup goes here:
 
+    #Todo Can we set an input variable? Can we do it by sender somehow? Property on sender Action or Name?
+    def show_pageMissingCategory(self):
+        self.stackedWidget.setCurrentWidget(self.pageMissingCategory)
 
     #populate QlistCategories from grocery store
     def populate_categories(self):
@@ -62,7 +71,8 @@ class MyApp(QtWidgets.QMainWindow, UiMainWindow):
         selected_id = self.get_selected_cagetory('id')
 
         if self.missing_ingredient is not None and selected_id is not None:
-            self.QlastAction.setText('Added ' +self.missing_ingredient[2] + ' to ' + str(selected_id))
+
+            self.QlastAction.setText('Added ' +self.missing_ingredient[2] + ' to ' + grocery_store.get_category_name_from_id(selected_id))
 
             grocery_store.add_ingredient_to_category(self.missing_ingredient[2], selected_id)
             groceries.set_category_for_item(self.missing_ingredient[2],selected_id)
@@ -74,7 +84,7 @@ class MyApp(QtWidgets.QMainWindow, UiMainWindow):
         selected_id = self.get_selected_cagetory('id')
 
         if self.missing_ingredient is not None and selected_id is not None:
-            self.QlastAction.setText('Set ' + self.missing_ingredient[2] + ' to ' + str(selected_id))
+            self.QlastAction.setText('Set ' + self.missing_ingredient[2] + ' to ' + grocery_store.get_category_name_from_id(selected_id))
 
             groceries.set_category_for_item(self.missing_ingredient[2], selected_id)
             self.next_missing_ingredient()
@@ -111,7 +121,7 @@ if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
 
-    window = MyApp()
+    window = GroceryAppUI()
     window.show()
 
     sys.exit(app.exec_())
