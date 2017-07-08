@@ -15,8 +15,6 @@ grocery_store = grocerystore.groceryStore('./data/store_order_zehrs.csv')
 groceries = grocerylist.groceryList(wp.WUNDERLIST_GROCERY, wp)
 groceries.get_categories(grocery_store)
 
-
-
 # load the UI class objects
 UiMainWindow, QtBaseClass = uic.loadUiType('./ui/recipeBookUI.ui')
 
