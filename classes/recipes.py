@@ -78,7 +78,7 @@ class Recipe:
 
     def __init__(self, name, workbook):
         self.name = name
-        self.worksheetName = name  # so far there isn't any difference with name
+        self.worksheetName = name  # so far there isn't any difference with name; no ID for example
         self.worksheet = workbook[self.worksheetName]
         self.ingredientList = []
 
