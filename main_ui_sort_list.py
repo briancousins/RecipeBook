@@ -2,9 +2,11 @@
 #works in qtpy (since it's uniform for ptqy5 i think
 import sys
 from qtpy import QtCore, QtGui, uic, QtWidgets
+import openpyxl
 
 from classes import grocerystore
 from classes import grocerylist
+from classes import recipes
 
 from classes import wunderpy_wrapper
 wp = wunderpy_wrapper.wunderpy_wrapper()
@@ -18,29 +20,40 @@ UiMainWindow, QtBaseClass = uic.loadUiType('./ui/recipeBookUI.ui')
 
 #UI class definition
 class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
-
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         UiMainWindow.__init__(self)
         self.setupUi(self)
-        
+
+        # init pages (just do them all...)
+        self.initPage_missingCategory()
+        self.initPage_addRecipe()
+
         #setup menubar
         self.QActionSort_grocery_list.triggered.connect(self.show_pageMissingCategory)
+        self.QActionAdd_recipe_to_list.triggered.connect(self.show_pageAddRecipe)
 
+    ## Menubar functions
+    #Todo Can we set an input variable? Can we do it by sender somehow? Property on sender Action or Name?
+    def show_pageMissingCategory(self):
+        self.initPage_missingCategory() #best to re-init each time. List may have changed.
+        self.stackedWidget.setCurrentWidget(self.pageMissingCategory)
+
+    def show_pageAddRecipe(self):
+        self.initPage_addRecipe()
+        self.stackedWidget.setCurrentWidget(self.pageAddRecipe)
+
+
+    ## Missing category functions
+
+    def initPage_missingCategory(self):
         #setup missing ingredient page:
         self.populate_categories()
-
         self.next_missing_ingredient()
 
         if self.missing_ingredient is not None:
             self.QbuttonSelect.clicked.connect(self.select_category_and_next)
             self.QbuttonSkip.clicked.connect(self.skip_category_select)
-
-        #next setup goes here:
-
-    #Todo Can we set an input variable? Can we do it by sender somehow? Property on sender Action or Name?
-    def show_pageMissingCategory(self):
-        self.stackedWidget.setCurrentWidget(self.pageMissingCategory)
 
     #populate QlistCategories from grocery store
     def populate_categories(self):
@@ -51,27 +64,28 @@ class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
             thisItem.setData(99,cat[0]) # read self.QlistCategories.item(<selected>).data(99)
             self.QlistCategories.addItem(thisItem)
 
+    #get the next missing ingredient and set the text box
     def next_missing_ingredient(self):
         new_ingred = groceries.get_next_new_ingredient()
 
         if new_ingred == None:
             self.missing_ingredient = None
             groceries.reorder_list()
-            self.set_next_ingredient('List re-ordered.')
+            self.set_missing_ingredient_text('List re-ordered.')
 
             self.QbuttonSelect.setDisabled(True)
             self.QbuttonSkip.setDisabled(True)
 
         else:
-            self.set_next_ingredient(new_ingred[2])
+            self.set_missing_ingredient_text(new_ingred[2])
             self.missing_ingredient = new_ingred
 
     # todo there is some repetition here that would be nice to fix
+    #save the category to the grocerylist and the .csv file for future access
     def select_category_and_next(self):
-        selected_id = self.get_selected_cagetory('id')
+        selected_id = self.get_selected_cagetory(self.QlistCategories, 'id')
 
         if self.missing_ingredient is not None and selected_id is not None:
-
             self.QlastAction.setText('Added ' +self.missing_ingredient[2] + ' to ' + grocery_store.get_category_name_from_id(selected_id))
 
             grocery_store.add_ingredient_to_category(self.missing_ingredient[2], selected_id)
@@ -80,6 +94,7 @@ class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
             self.next_missing_ingredient()
 
     # todo there is some repetition here that would be nice to fix
+    #allow the addition of a category in the grocery list without saving it to the .csv file
     def skip_category_select(self):
         selected_id = self.get_selected_cagetory('id')
 
@@ -90,9 +105,9 @@ class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
             self.next_missing_ingredient()
 
     #on QbuttonSelect click get the selectedItem() from QlistCategories
-    def get_selected_cagetory(self, ret='id'):
+    def get_selected_cagetory(self, Qlist, ret='id'):
 
-        selectedItems = self.QlistCategories.selectedItems()
+        selectedItems = Qlist.selectedItems()
 
         if len(selectedItems) == 1:
             selected_category = selectedItems[0].text()
@@ -109,13 +124,39 @@ class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
         else:
             return selected_category_id
 
-
-    def set_next_ingredient(self, text):
+    #set the correct element to indicate what the next missing ingredient is
+    def set_missing_ingredient_text(self, text):
         self.QtextMissing_ingredient.setText(text)
 
-    #groceries.get_categories(grocery_store)
-    #groceries.reorder_list()
 
+    ## Add recipe page functions
+
+    def initPage_addRecipe(self):
+        self.recipe_book = openpyxl.load_workbook('./data/recipes.xlsm')
+
+        recipeList = recipes.RecipeList(self.recipe_book['TOC'])
+
+        for index, recipe_name in enumerate(recipeList.getRecipeList()):
+            thisItem = QtWidgets.QListWidgetItem(recipe_name)
+            thisItem.setData(99,index) # read self.QlistRecipes.item(<selected>).data(99)
+            self.QlistRecipes.addItem(thisItem)
+
+        self.QbuttonAddRecipe.clicked.connect(self.add_recipe)
+
+    def add_recipe(self):
+
+        recipeName = self.get_selected_cagetory(self.QlistRecipes, 'name')
+
+        if recipeName is not None:
+            newRecipe = recipes.Recipe(recipeName, self.recipe_book)
+            newRecipe.getIngredients()
+            newRecipe.addMealToWunderlist(wp.WUNDERLIST_MEALS, wp.client)
+            newRecipe.addListToWunderlist(wp.WUNDERLIST_GROCERY, wp.client)
+
+
+
+
+################
 # main program
 if __name__ == "__main__":
 
