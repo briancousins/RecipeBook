@@ -3,9 +3,9 @@ import csv
 
 class wunderpy_wrapper:
 
-    def __init__(self):
+    def __init__(self, tokens_file='./data/tokens.csv'):
 
-        self.load_tokens()
+        self.load_tokens(tokens_file)
 
         self.wp_api = wunderpy2.WunderApi()
         self.client = self.wp_api.get_client(self.access_token, self.client_id)
@@ -14,7 +14,7 @@ class wunderpy_wrapper:
     # load all the wudnerlist config tokens. I know it's a hack. I'd rather have a tokens dict and use it
     # but here we are
     # I was bad about methods to access data previously and now we're stuck keeping self.<var> as is.
-    def load_tokens(self, file = './data/tokens.csv'):
+    def load_tokens(self, file='./data/tokens.csv'):
         with open(file, 'r') as csvfile:
             reader = csv.DictReader(csvfile, ['name','key'])
             keys = [r['key'] for r in reader]

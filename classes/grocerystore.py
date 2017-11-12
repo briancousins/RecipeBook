@@ -7,14 +7,12 @@ import classes.wunderpy_wrapper
 
 class groceryStore:
 
-    # TODO refactor this so it isn't hardcoded.
-    ingredient_file = './data/ingredient_categories.csv'  # really not happy about this!
-
     #set up categories and ingredients automatically
-    def __init__(self, store_category_file='./data/store_order_zehrs.csv'):
+    def __init__(self, store_category_url='./data/store_order_zehrs.csv', ingredient_url='./data/ingredient_categories.csv'):
 
         # set object variables
-        self.store_category_file = store_category_file
+        self.store_category_url = store_category_url
+        self.ingredient_url = ingredient_url
 
         self.ingredient_match_str = re.compile(
             '[0-9?/%-. ]*(tablespoons|teaspoons|cups|tablespoon|teaspoon|pounds|cloves|pound|large|some|pack|cup|tsps|tbsps|tsp|tbsp|lbs|lb|ml|of|oz|mg|g|t|l|C|Q|v|x)*([?+"])*(?(1)\s)+(?P<ingredient>["A-z \']+)',
@@ -28,8 +26,8 @@ class groceryStore:
         self.categories = []  # categories[?] = (id, name, order); should be fast to search the list.
 
         # run init methods
-        self.load_category_order() # loads off of self.category_file
-        self.load_ingredients() # can be overwritten if the default is no good
+        self.load_category_order()  # loads off of self.category_file
+        self.load_ingredients(self.ingredient_url)  # can be overwritten if the default is no good
 
     # loads ingredients into the dict from file.
     def load_ingredients(self, file='./data/ingredient_categories.csv'):
@@ -47,7 +45,7 @@ class groceryStore:
     # this is run as part of the init routine. you shouldn't need to run this at all.
     def load_category_order(self):
 
-        with open(self.store_category_file, 'rb') as category_file:
+        with open(self.store_category_url, 'rb') as category_file:
             category_csv = csv.reader(category_file, delimiter=',')
             for row in category_csv:
                 try:
@@ -69,10 +67,12 @@ class groceryStore:
 
         return category
 
-    # ensure this is run only after you load_category_order(); no error checking.
+    # Returns the category column specified by return_column (via return_category_order)
+    # when return_category_order == True it should return category order in the groc. store; not cat_id.
+    # Also, nsure this is run only after you load_category_order(); no error checking.
     # does isolation as part of the call, so this is the key interface with the class
     #  typically we want to return the category order for sorting in a given store.
-    def get_and_fix_category_for_ingredient(self, ingredient, return_category_order = True):
+    def get_and_fix_category_for_ingredient(self, ingredient, return_category_order=True):
 
         if return_category_order == True:
             return_column = 2
@@ -86,7 +86,7 @@ class groceryStore:
         if category is not None:
             category_id = category[return_column]
         else:
-            print('Did not find ingredient ' + isolated_ingredient + '.')
+            print('Did not find ingredient ' + ingredient + '.')
 
             add_to_category = 'l'
             while add_to_category == 'l':
@@ -101,7 +101,7 @@ class groceryStore:
                     #1 <= int(add_to_category) <= 99:  #  todo really worried about this.
                     add_to_category_id = int(add_to_category)
 
-                    self.add_ingredient_to_category(isolated_ingredient, add_to_category_id)
+                    self.add_ingredient_to_category(ingredient, add_to_category_id)
                     category_id = self.get_category_order_from_id(add_to_category_id)
 
                 else:
@@ -126,14 +126,12 @@ class groceryStore:
 
         return full_result
 
-    # TODO test may not work. this seems fine
-    # TODO i'd like to refactor ingredient_file
     def add_ingredient_to_category(self, ingredient_name, category):
 
-        if groceryStore.ingredient_file is not None:
+        if self.ingredient_url is not None:
             ingredient_name = self.isolate_ingredient_name(ingredient_name)
 
-            with open(groceryStore.ingredient_file, 'ab') as csvfile:
+            with open(self.ingredient_url, 'ab') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL, quotechar='`')
                 writer.writerow([ingredient_name, category])
 

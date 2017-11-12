@@ -37,7 +37,7 @@
          <enum>QFrame::Sunken</enum>
         </property>
        </widget>
-       <widget class="QPushButton" name="QbuttonSkip">
+       <widget class="QPushButton" name="QbuttonSkipCategory">
         <property name="geometry">
          <rect>
           <x>240</x>
@@ -51,7 +51,7 @@
  don't add permenantly</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="QbuttonSelect">
+       <widget class="QPushButton" name="QbuttonSelectCategory">
         <property name="geometry">
          <rect>
           <x>240</x>
@@ -187,6 +187,7 @@
         </property>
        </widget>
       </widget>
+      <widget class="QWidget" name="pageSettings"/>
      </widget>
     </item>
    </layout>
@@ -203,12 +204,19 @@
    </property>
    <widget class="QMenu" name="menuList_management">
     <property name="title">
-     <string>List management</string>
+     <string>File</string>
+    </property>
+    <addaction name="actionSettings"/>
+   </widget>
+   <widget class="QMenu" name="menuList_Management">
+    <property name="title">
+     <string>List Management</string>
     </property>
     <addaction name="QActionSort_grocery_list"/>
     <addaction name="QActionAdd_recipe_to_list"/>
    </widget>
    <addaction name="menuList_management"/>
+   <addaction name="menuList_Management"/>
   </widget>
   <action name="QActionSort_grocery_list">
    <property name="text">
@@ -218,6 +226,11 @@
   <action name="QActionAdd_recipe_to_list">
    <property name="text">
     <string>Add recipe to list</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
    </property>
   </action>
  </widget>
