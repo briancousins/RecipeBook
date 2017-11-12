@@ -30,7 +30,7 @@ class groceryList:
         return grocery_store.get_and_fix_category_for_ingredient(element[2])
 
     def get_category_for_element(self, element, grocery_store):
-        category_id_col = 2
+        category_id_col = 2  # category id we want returned is the cat order, not cat id.
 
         category = grocery_store.get_category_for_ingredient(element[2])
 
@@ -52,8 +52,9 @@ class groceryList:
                 self.grocery_list[index][1] = category
 
 
-    #order self.grocery_list based on category order
-    def reorder_list(self, local_only = False):
+    # order self.grocery_list based on category order
+    # local order doesn't upload re-ordering to wonderlist
+    def reorder_list(self, local_only=False):
 
         self.grocery_list.sort(key=itemgetter(1))  # itemgetter tells python which key to use to sort on. in this case category_order.
         if local_only is not True:
