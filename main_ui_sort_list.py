@@ -97,6 +97,7 @@ class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
         if self.missing_ingredient is None:
             groceries.reorder_list()
             self.set_missing_ingredient_text('List re-ordered.')
+            self.QlastAction.setText('')
 
             self.QbuttonSelectCategory.setDisabled(True)
             self.QbuttonSkipCategory.setDisabled(True)

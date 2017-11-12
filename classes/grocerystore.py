@@ -14,6 +14,7 @@ class groceryStore:
         self.store_category_url = store_category_url
         self.ingredient_url = ingredient_url
 
+        # todo `2 vidallia onion`, `1 spanish onion`` broke this.
         self.ingredient_match_str = re.compile(
             '[0-9?/%-. ]*(tablespoons|teaspoons|cups|tablespoon|teaspoon|pounds|cloves|pound|large|some|pack|cup|tsps|tbsps|tsp|tbsp|lbs|lb|ml|of|oz|mg|g|t|l|C|Q|v|x)*([?+"])*(?(1)\s)+(?P<ingredient>["A-z \']+)',
             re.IGNORECASE)  # want to limit lengths, no ,- allowed.
