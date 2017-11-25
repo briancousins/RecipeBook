@@ -169,8 +169,10 @@ class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
             thisItem.setData(99, index)  # read self.QlistRecipes.item(<selected>).data(99)
             self.QlistRecipes.addItem(thisItem)
 
-    def on_QbuttonAddRecipe_clicked(self):
-        recipeName = self.get_selected_cagetory(self.QlistRecipes, 'name')
+    def on_QbuttonAddRecipe_pressed(self):
+        recipeName = self.QlistRecipes.selectedItems()[0].text()  # self.get_selected_cagetory(self.QlistRecipes, 'name')
+
+
 
         if recipeName is not None:
             newRecipe = recipes.Recipe(recipeName, self.recipe_book)
