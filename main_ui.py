@@ -45,6 +45,7 @@ class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
     # Menubar functions
 
     def on_QActionSort_grocery_list_triggered(self):
+        groceries.get_tasks()  # pick up the tasks again for when you activate via menu
         self.initPage_missingCategory()  # best to re-init each time. List may have changed.
         self.stackedWidget.setCurrentWidget(self.pageMissingCategory)
 
@@ -64,6 +65,7 @@ class GroceryAppUI(QtWidgets.QMainWindow, UiMainWindow):
     # Missing category functions
 
     def initPage_missingCategory(self):
+
         # setup missing ingredient page:
         if self.QlistCategories.count() == 0:
             self.populate_categories()
